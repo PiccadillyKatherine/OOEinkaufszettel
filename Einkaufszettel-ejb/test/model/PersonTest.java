@@ -136,16 +136,30 @@ public class PersonTest {
 
     /**
      * Test of getId method, of class Person.
+     * Leere Person. ID = Null. Erwarteter Wert Null.
      */
     @Test
     public void testGetId() {
         System.out.println("getId");
         Person instance = new Person();
-        Long expResult = null;
+        Long expResult = null;             
         Long result = instance.getId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    }
+    /**
+     * Test of getId method, of class Person.
+     * Setzen der ID mit SetId.
+     * Erfolgreich.
+     */
+    @Test
+    public void testGetId2() {
+        System.out.println("getId");
+        Person instance = new Person();
+        instance.setId(20L);
+        Long expResult =20L;             
+        Long result = instance.getId();
+        assertEquals(expResult, result);
+       // System.out.println(instance.getId());
     }
 
     /**
@@ -160,7 +174,7 @@ public class PersonTest {
         Person instance = new Person();
         instance.setId(id);
         Long expResult = null;
-        Long result = null;
+        Long result = instance.getId();
         assertEquals(expResult, result);
     }
     
@@ -170,11 +184,11 @@ public class PersonTest {
     @Test
     public void testSetId2() {
         System.out.println("setId");
-        Long id = 10;
+        Long id = 10L;
         Person instance = new Person();
         instance.setId(id);
-        Long expResult = null;
-        Long result = null;
+        Long expResult = 10L;
+        Long result = instance.getId();
         assertEquals(expResult, result);
     }
 
