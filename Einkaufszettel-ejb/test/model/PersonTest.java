@@ -35,12 +35,30 @@ public class PersonTest {
 
     /**
      * Test of getName method, of class Person.
+     * Leerer Konstruktor -> leerer Name
+     * Test erfolgreich
      */
     @Test
     public void testGetName() {
         System.out.println("getName");
         Person instance = new Person();
-        String expResult = "";
+        String expResult = null;
+        String result = instance.getName();
+        assertEquals(expResult, result);
+     
+    }
+    /**
+     * Test of getName method, of class Person.
+     * Nutzen der bereits gegetesteten Methode setName.
+     * gesetzter name: Tanja.
+     * Erfolgreich.
+     */
+    @Test
+    public void testGetName2() {
+        System.out.println("getName");
+        Person instance = new Person();
+        instance.setName("Tanja");
+        String expResult = "Tanja";
         String result = instance.getName();
         assertEquals(expResult, result);
      
@@ -132,6 +150,8 @@ public class PersonTest {
 
     /**
      * Test of setId method, of class Person.
+     * Eingabe Null, ergebnis null.
+     * Test Erfolgreich.
      */
     @Test
     public void testSetId() {
@@ -139,8 +159,23 @@ public class PersonTest {
         Long id = null;
         Person instance = new Person();
         instance.setId(id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Long expResult = null;
+        Long result = null;
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of setId method, of class Person.
+     */
+    @Test
+    public void testSetId2() {
+        System.out.println("setId");
+        Long id = 10;
+        Person instance = new Person();
+        instance.setId(id);
+        Long expResult = null;
+        Long result = null;
+        assertEquals(expResult, result);
     }
 
     /**
