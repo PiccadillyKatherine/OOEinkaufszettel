@@ -135,8 +135,7 @@ public class PersonTest {
         Warenkorb expResult = null;
         Warenkorb result = instance.getMeinwarenkorb();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
 
     /**
@@ -198,6 +197,7 @@ public class PersonTest {
     
     /**
      * Test of setId method, of class Person.
+     * ID auf 10 setzen.
      */
     @Test
     public void testSetId2() {
@@ -209,7 +209,23 @@ public class PersonTest {
         Long result = instance.getId();
         assertEquals(expResult, result);
     }
-
+    /**
+     * Test of setId method, of class Person.
+     * ID auf 10 setzen. Danach ID auf 20 setzen. Dann ausgeben.
+     */
+    @Test
+    public void testSetId3() {
+        System.out.println("setId3");
+        Long id = 10L;
+        Person instance = new Person();
+        instance.setId(id);
+        Long id2 = 20L;
+        instance.setId(id2);
+        Long expResult = 20L;
+        Long result = instance.getId();
+        assertEquals(expResult, result);
+    }
+    
     /**
      * Test of hashCode method, of class Person.
      */
