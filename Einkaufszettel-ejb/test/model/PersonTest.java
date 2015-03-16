@@ -55,10 +55,28 @@ public class PersonTest {
      */
     @Test
     public void testGetName2() {
-        System.out.println("getName");
+        System.out.println("getName2");
         Person instance = new Person();
         instance.setName("Tanja");
         String expResult = "Tanja";
+        String result = instance.getName();
+        assertEquals(expResult, result);
+     
+    }
+/**
+     * Test of getName method, of class Person.
+     * Übergabe des namens in den Konstruktor. Ohne Nutzen der SetName Methode.
+     * Test Erfolgreich.
+     */
+    @Test
+    public void testGetName3() {
+        System.out.println("getName3");
+        String name = "Tammy";
+        String password = null;
+        Warenkorb meinwarenkorb = null;
+        Person instance;
+        instance = new Person(name, password, meinwarenkorb);
+        String expResult = "Tammy";
         String result = instance.getName();
         assertEquals(expResult, result);
      
@@ -153,13 +171,13 @@ public class PersonTest {
      */
     @Test
     public void testGetId2() {
-        System.out.println("getId");
+        System.out.println("getId2");
         Person instance = new Person();
         instance.setId(20L);
         Long expResult =20L;             
         Long result = instance.getId();
         assertEquals(expResult, result);
-       // System.out.println(instance.getId());
+        //System.out.println(instance.getId());
     }
 
     /**
@@ -183,7 +201,7 @@ public class PersonTest {
      */
     @Test
     public void testSetId2() {
-        System.out.println("setId");
+        System.out.println("setId2");
         Long id = 10L;
         Person instance = new Person();
         instance.setId(id);
@@ -223,16 +241,17 @@ public class PersonTest {
 
     /**
      * Test of toString method, of class Person.
+     * Ausgabe soll mit gegebenem String und id der Person erfolgen.
+     * 
      */
     @Test
     public void testToString() {
         System.out.println("toString");
         Person instance = new Person();
-        String expResult = "";
+        String expResult = "model.Person[ id=" + instance.getId() + " ]";
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
     }
     
 }
