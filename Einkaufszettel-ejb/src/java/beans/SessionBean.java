@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package beans;
 
 import java.sql.Connection;
@@ -36,60 +32,34 @@ public class SessionBean implements SessionBeanLocal {
     @PersistenceContext (unitName = "Einkaufszettel-ejbPU")
     EntityManager em;
     
-    @Override
-    public List<Menge> warenkorbAnzeigen(Person user) {
-            TypedQuery<Warenkorb> ergebnis = em.createNamedQuery("Warenkorb.warenkorbAnzeigen", Warenkorb.class);
-            ergebnis.setParameter("queryid", user.getMeinwarenkorb().getId());
-            if (ergebnis.getResultList().isEmpty()) {
-                 return new ArrayList<Menge>();
-            }else {
-                ergebnis.getResultList().get(0).calculateRewePrice();
-                return ergebnis.getResultList().get(0).getProduktanzahlen();
-            }
-    }
+@Override
+public List<Menge> warenkorbAnzeigen(Person user) {
+        TypedQuery<Warenkorb> ergebnis = em.createNamedQuery("Warenkorb.warenkorbAnzeigen", Warenkorb.class);
+        ergebnis.setParameter("queryid", user.getMeinwarenkorb().getId());
+        if (ergebnis.getResultList().isEmpty()) {
+             return new ArrayList<Menge>();
+        }else {
+            ergebnis.getResultList().get(0).calculateRewePrice();
+            return ergebnis.getResultList().get(0).getProduktanzahlen();
+        }
+          
+
+
+}
     
     @Override
     public void deleteItem(long mengenid, Person user) {
-        // PROBLEM HIER!
-        
-       // Warenkorbarray auslesen 
+       // Produkt-Objekt besorgen, da JSP nur Bezeichnung übermitteln kann
+       
+       
        List<Menge> wkinhalt = user.getMeinwarenkorb().getProduktanzahlen();
-       
-       // Mengenobjekt über ID auslesen
-       //Menge m = sucheMengeById(mengenid);
-       
-       // Debugging
-       //System.out.println("id der menge: "+m.getId()+"  Anzahl: "+m.getAnzahl()+"  Produktname: "+m.getP().getBezeichnung());
-       // /Debugging
-       
-       for (Menge item : wkinhalt){
-           System.out.println("Arrayinhalt vor löschen: "+item.getP().getBezeichnung());
-       }
-       
-       for (Menge item : wkinhalt){
-           System.out.println(item);
-           if (item.getId() == mengenid){
-            wkinhalt.remove(item);
-            break;
-           }
-          
-       }
-       
-       // Mengenobjekt vom Warenkorbarray entfernen
-       //wkinhalt.remove(m);
-       
-       for (Menge item : wkinhalt){
-           System.out.println("Arrayinhalt nach löschen: "+item.getP().getBezeichnung());
-       }
-       
-       // Warenkorbarray in Userobjektreferenz eintragen
+       Menge m = sucheMengeById(mengenid);
+       wkinhalt.remove(m);
        user.getMeinwarenkorb().setProduktanzahlen(wkinhalt);
-       
-       // Was mergen? Fehlt da was?
-       em.merge(user.meinwarenkorb); 
+       em.merge(user.meinwarenkorb);
+       //produktanzahlen.remove(0);
        
     }
-    
     @Override
     public Menge sucheMengeById(long mengenid) {
         TypedQuery<Menge> m = em.createNamedQuery("Menge.sucheMengeById", Menge.class);
@@ -129,11 +99,16 @@ public class SessionBean implements SessionBeanLocal {
        
        
        //  LÖSCHEN VORM ADDEN 
+        int index = 0;
+        int deleteindex = 999;
         for (Menge aktuellemenge : produktanzahlen){
             if (aktuellemenge.getP().getId() == produktid){
-               produktanzahlen.remove(aktuellemenge);
-               break;
+                deleteindex = index;
             }
+            index++;
+        }
+        if (deleteindex!=999){
+            produktanzahlen.remove(deleteindex);
         }
         
        //Produkt durch id auslesen
@@ -141,7 +116,7 @@ public class SessionBean implements SessionBeanLocal {
        
        //Mengenobjekt erzeugen
        Menge m = new Menge (anzahl, p);
-       em.persist(m);
+       
        //Zu Mengenarray hinzufügen
        produktanzahlen.add(m);
        user.getMeinwarenkorb().setProduktanzahlen(produktanzahlen);
