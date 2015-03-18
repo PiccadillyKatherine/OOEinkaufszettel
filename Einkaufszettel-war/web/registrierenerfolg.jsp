@@ -13,11 +13,14 @@
     </head>
     <body>
         <article class="includecontent hintergrund">
-            <header>
-                <h2>Willkommen ${loginstatus}!</h2>
-            </header>
-            <footer>
-                <p class="articleinfo">Manuel hat das geschrieben</p>
-            </footer>
+                    <header>
+                        <h2>Willkommen ${name}!</h2>
+                    </header>
+                    <footer>
+                        <p class="articleinfo">Manuel hat das geschrieben</p>
+                    </footer>
+                    
+                   
+                </article>
     </body>
 </html>

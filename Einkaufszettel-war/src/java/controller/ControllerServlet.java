@@ -8,7 +8,6 @@ package controller;
 import beans.SessionBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,9 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Produkt;
 import javax.ejb.EJB;
-import model.Menge;
 import model.Person;
-import model.Warenkorb;
 
 /**
  *
@@ -29,110 +26,46 @@ import model.Warenkorb;
 public class ControllerServlet extends HttpServlet {
    @EJB
     private SessionBeanLocal SessionBean;
-    private Person user;
-    DecimalFormat f = new DecimalFormat("#0.00"); 
-    Warenkorb keinwarenkorb = new Warenkorb();
-    Person ausgeloggt = new Person("notloggedin", "lol", keinwarenkorb);
-    String keyword;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            
-            
-            // Startseite am Anfang anzeigen
            if (request.getParameter("step")==null) {
-                // Login auf leer setzen
-                
-                user = ausgeloggt;
-                request.setAttribute("loginstatus", user.getName());
-                
-                request.setAttribute("includepage", "/start.jsp");
-                request.getRequestDispatcher("menu.jsp").forward(request, response);
+                 request.setAttribute("includepage", "/start.jsp");
+                 request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
             String currentStep = request.getParameter("step");
             
-            // Sucheseite
             if (currentStep.equals("search")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
                 request.setAttribute("includepage", "/search.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
-            
-            // Startseite
             if (currentStep.equals("start")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
                 request.setAttribute("includepage", "/start.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
-            
-            // Warenkorb 
             if (currentStep.equals("cart")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                if (user.getName().equals("notloggedin")){
-                    request.setAttribute("includepage", "/bitteeinloggen.jsp");
-                    request.getRequestDispatcher("menu.jsp").forward(request, response); 
-                }
-                else {
-                    
-                    List<Menge> productlist = SessionBean.warenkorbAnzeigen(user);
-                    request.setAttribute("preise", SessionBean.calculatePrices(user));
-                    request.setAttribute("result", productlist); 
-                    request.setAttribute("includepage", "/warenkorb.jsp");
-                    request.getRequestDispatcher("menu.jsp").forward(request, response);
-                }
+                request.setAttribute("includepage", "/warenkorb.jsp");
+                request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
-            
-            // Login
             if (currentStep.equals("login")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
                 request.setAttribute("includepage", "/login.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
             
-            // Logout
-            if (currentStep.equals("logout")) {
-                
-                user = ausgeloggt;
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
-                request.setAttribute("includepage", "/start.jsp");
+            if (currentStep.equals("loginstart")) {
+                request.setAttribute("includepage", "/wartung.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
             
-            // Login Button gedrückt
-            if (currentStep.equals("loginstart")) {
-                
-                String name = request.getParameter("name");
-                String password = request.getParameter("passwort");
-                user = SessionBean.login(name, password);
-                request.setAttribute("loginstatus", user.getName());
-                if (user.equals(ausgeloggt)){
-                request.setAttribute("includepage", "/wartung.jsp");
-                request.getRequestDispatcher("menu.jsp").forward(request, response);
-                }else{
-                request.setAttribute("includepage", "/willkommen.jsp");
-                request.getRequestDispatcher("menu.jsp").forward(request, response);
-                }
-            }
             // Produktsuche
             if (currentStep.equals("startsearchproduct")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
-                keyword = request.getParameter("txtkeyword");
+                String keyword = request.getParameter("txtkeyword");
                 List<Produkt> productlist = SessionBean.sucheProdukt(keyword);
                 if(productlist.size()!=0){
+                    request.setAttribute("anbieter", "rewe");
                     request.setAttribute("result", productlist); 
                     request.setAttribute("includepage", "/Suchergebnis.jsp");
                     request.setAttribute("keyword", keyword);
@@ -145,16 +78,32 @@ public class ControllerServlet extends HttpServlet {
                 }
             }     
             
-            
+            //Anbietersuche
+            if (currentStep.equals("startsearchprovider")) {
+                String keyword = request.getParameter("txtkeyword");
+                List<Produkt> productlist = SessionBean.sucheAnbieter(keyword);
+                
+                
+                if(productlist.size()!=0){
+                    request.setAttribute("anbieter", "rewe");
+                    request.setAttribute("result", productlist); 
+                    request.setAttribute("includepage", "/Suchergebnis.jsp");
+                    request.setAttribute("keyword", keyword);
+                    request.getRequestDispatcher("menu.jsp").forward(request, response); 
+                }
+                else{
+                    request.setAttribute("keyword", keyword);
+                    request.setAttribute("includepage", "/keineergebnisse.jsp");
+                    request.getRequestDispatcher("menu.jsp").forward(request, response);
+                }
+            } 
             
             //Kategoriesuche
             if (currentStep.equals("startsearchcategory")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
                 String keyword = request.getParameter("txtkeyword");
                 List<Produkt> productlist = SessionBean.sucheKategorie(keyword);
                 if(productlist.size()!=0){
+                    request.setAttribute("anbieter", "rewe");
                     request.setAttribute("result", productlist); 
                     request.setAttribute("includepage", "/Suchergebnis.jsp");
                     request.setAttribute("keyword", keyword);
@@ -167,100 +116,36 @@ public class ControllerServlet extends HttpServlet {
             } 
             
             
-            // Registrierseite  aufrufen (von Loginseite aus)
+            
             if (currentStep.equals("registerstart")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                
                 request.setAttribute("includepage", "/registrieren.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
             }
             
-            // Registrierbutton gedrückt
             if (currentStep.equals("registrierversuch")) {
                
-                request.setAttribute("loginstatus", user.getName());
-                if (!"".equals(request.getParameter("passwort")) && 
-                        request.getParameter("passwort").equals(request.getParameter("passwort2")) && !"".equals(request.getParameter("name")))
-                {
-                    
-                    user = SessionBean.createPerson(request.getParameter("name"),
-                                                      request.getParameter("passwort"));
-                    
-                    request.setAttribute("loginstatus", user.getName());
-                    if (user.getName().equals("notloggedin")){
-                        request.setAttribute("status","User schon vorhanden!");
-                        request.setAttribute("includepage","/registrieren.jsp");
-                        request.getRequestDispatcher("menu.jsp").forward(request, response);       
-                    }
-                    else {
-                        request.setAttribute("includepage", "/registrierenerfolg.jsp");
-                        request.getRequestDispatcher("menu.jsp").forward(request, response);
-                    }
-                    
-                   }else{
-                   request.setAttribute("status","Name und Passwort dürfen nicht leer sein / Passwort muss Wiederholung sein!");
-                    request.setAttribute("includepage","/registrieren.jsp");
-                    request.getRequestDispatcher("menu.jsp").forward(request, response);      
-                   }
-            }
-            
-             // Item hinzufügen
-            if (currentStep.equals("addItem")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                if (user.getName().equals("notloggedin")){
-                    request.setAttribute("includepage", "/bitteeinloggen.jsp");
-                    request.getRequestDispatcher("menu.jsp").forward(request, response); 
-                }
-                else {
-                    int menge = Integer.parseInt(request.getParameter("menge"));
-                    long produktid = Long.parseLong(request.getParameter("produktid"));
-                    SessionBean.addItem(menge, produktid, user);
-                    List<Produkt> productlist = SessionBean.sucheProdukt(keyword);
-                    request.setAttribute("result", productlist); 
-                    request.setAttribute("includepage", "/Suchergebnis.jsp");
-                    request.setAttribute("keyword", keyword);
-                    request.getRequestDispatcher("menu.jsp").forward(request, response);
-                }
-            }
-            // Menge ändern
-             if (currentStep.equals("changeAmount")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
                 
-              
-                int menge = Integer.parseInt(request.getParameter("menge"));
-                long produktid = Long.parseLong(request.getParameter("produktid"));
-                SessionBean.addItem(menge, produktid, user);
+            if (request.getParameter("passwort") != null &&
+                request.getParameter("passwort2") != null &&
+                request.getParameter("passwort").
+                equals(request.getParameter("passwort2")))
+            {
                 
-                
-                List<Menge> productlist = SessionBean.warenkorbAnzeigen(user);
-                request.setAttribute("preise", SessionBean.calculatePrices(user));
-                request.setAttribute("result", productlist); 
-                request.setAttribute("includepage", "/warenkorb.jsp");
+                Person person = SessionBean.createPerson(request.getParameter("name"),
+                                                  request.getParameter("login"), 
+                                                  request.getParameter("passwort"));    
+                request.setAttribute("name", request.getParameter("name"));
+                request.setAttribute("includepage", "/registrierenerfolg.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
+               }else{
                 
-            }
-            
-            // Item löschen
-            if (currentStep.equals("deleteitem")) {
-                // Username auslesen für menu.jsp
-                request.setAttribute("loginstatus", user.getName());
-                Long mengenid = Long.parseLong(request.getParameter("mengenid"));
-                System.out.println("MengenID vor delete: "+mengenid);
-                SessionBean.deleteItem(mengenid, user);
-                System.out.println("MengenID nach delete: "+mengenid);
-                List<Menge> productlist = SessionBean.warenkorbAnzeigen(user);
-                request.setAttribute("preise", SessionBean.calculatePrices(user));
-                request.setAttribute("result", productlist); 
-                request.setAttribute("includepage", "/warenkorb.jsp");
+                request.setAttribute("status","Das hat leider nicht geklappt!");
+                request.setAttribute("includepage","/registrieren.jsp");
                 request.getRequestDispatcher("menu.jsp").forward(request, response);
+            }
+                
             }
         }
-    
-        
-             
         finally {
             out.close();
         }

@@ -6,51 +6,70 @@
 package model;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Marco
+ * @author Manuel
  */
-
 @Entity
 @Table(name = "PRODUKT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Produkt.sucheProdukt", query = "SELECT  p FROM Produkt p WHERE p.bezeichnung LIKE :querykeyword"),
-    @NamedQuery(name = "Produkt.sucheId", query = "SELECT  p FROM Produkt p WHERE p.id = :queryid"),
-    @NamedQuery(name = "Produkt.sucheKategorie", query = "SELECT  p FROM Produkt p WHERE p.kategorie LIKE :querykeyword")})
+    @NamedQuery(name = "Produkt.findAll", query = "SELECT p FROM Produkt p"),
+    @NamedQuery(name = "Produkt.findById", query = "SELECT p FROM Produkt p WHERE p.id = :id"),
+    
+    
+    @NamedQuery(name = "Produkt.sucheAnbieter", query = "select p FROM Produkt p WHERE p.anbieter LIKE :querykeyword"),
+    @NamedQuery(name = "Produkt.sucheProdukt", query = "select p FROM Produkt p WHERE p.bezeichnung LIKE :querykeyword"),
+    @NamedQuery(name = "Produkt.sucheKategorie", query = "select p FROM Produkt p WHERE p.kategorie LIKE :querykeyword"),
+
+    @NamedQuery(name = "Produkt.findByBezeichnung", query = "SELECT p FROM Produkt p WHERE p.bezeichnung = :bezeichnung"),
+    @NamedQuery(name = "Produkt.findByKategorie", query = "SELECT p FROM Produkt p WHERE p.kategorie = :kategorie"),
+    @NamedQuery(name = "Produkt.findByPreis", query = "SELECT p FROM Produkt p WHERE p.preis = :preis"),
+    @NamedQuery(name = "Produkt.findByAnbieter", query = "SELECT p FROM Produkt p WHERE p.anbieter = :anbieter")})
 public class Produkt implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID")
+    private Integer id;
+    @Size(max = 100)
+    @Column(name = "BEZEICHNUNG")
     private String bezeichnung;
+    @Size(max = 100)
+    @Column(name = "KATEGORIE")
     private String kategorie;
-    private double Preisrewe;
-    private double Preisaldi;
-    private double Preislidl;
-    private double Preisreal;
-    private double Preisedeka;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "PREIS")
+    private Double preis;
+    @Size(max = 100)
+    @Column(name = "ANBIETER")
+    private String anbieter;
 
     public Produkt() {
     }
 
-    public Produkt(String bezeichnung, String kategorie, double Preisrewe, double Preisaldi, double Preislidl, double Preisreal, double Preisedeka) {
-        this.bezeichnung = bezeichnung;
-        this.kategorie = kategorie;
-        this.Preisrewe = Preisrewe;
-        this.Preisaldi = Preisaldi;
-        this.Preislidl = Preislidl;
-        this.Preisreal = Preisreal;
-        this.Preisedeka = Preisedeka;
+    public Produkt(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getBezeichnung() {
@@ -69,54 +88,20 @@ public class Produkt implements Serializable {
         this.kategorie = kategorie;
     }
 
-    public double getPreisrewe() {
-        return Preisrewe;
+    public Double getPreis() {
+        return preis;
     }
 
-    public void setPreisrewe(double Preisrewe) {
-        this.Preisrewe = Preisrewe;
+    public void setPreis(Double preis) {
+        this.preis = preis;
     }
 
-    public double getPreisaldi() {
-        return Preisaldi;
+    public String getAnbieter() {
+        return anbieter;
     }
 
-    public void setPreisaldi(double Preisaldi) {
-        this.Preisaldi = Preisaldi;
-    }
-
-    public double getPreislidl() {
-        return Preislidl;
-    }
-
-    public void setPreislidl(double Preislidl) {
-        this.Preislidl = Preislidl;
-    }
-
-    public double getPreisreal() {
-        return Preisreal;
-    }
-
-    public void setPreisreal(double Preisreal) {
-        this.Preisreal = Preisreal;
-    }
-
-    public double getPreisedeka() {
-        return Preisedeka;
-    }
-
-    public void setPreisedeka(double Preisedeka) {
-        this.Preisedeka = Preisedeka;
-    }
-
-    
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setAnbieter(String anbieter) {
+        this.anbieter = anbieter;
     }
 
     @Override

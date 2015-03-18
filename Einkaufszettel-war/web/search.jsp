@@ -23,7 +23,12 @@
                        
                     </form>
                 </div>
-                
+                <div class="searchfield" id="search">
+                    <form method="post" action="/Einkaufszettel-war/index?step=startsearchprovider">
+                        <input type="text" name="txtkeyword" placeholder="Anbieter"/>
+                       
+                    </form>
+                </div>
                 <div class="searchfield" id="search">
                     <form method="post" action="/Einkaufszettel-war/index?step=startsearchcategory">
                         <input type="text" name="txtkeyword" placeholder="Kategorie"/>

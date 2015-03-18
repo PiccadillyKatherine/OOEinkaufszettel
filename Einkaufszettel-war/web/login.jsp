@@ -12,25 +12,26 @@
         <title>JSP Page</title>
     </head>
     <body>
-           <article class="includecontent hintergrund">
-                <header>
-                    <h2>Das ist die Login-Seite</h2>
-                </header>
-              
-                <p>
-                    Hier kann man sich einloggen
-                </p>
-                
-                <form method="post" id="login" action="/Einkaufszettel-war/index?step=loginstart">
-                    <input placeholder="Name eingeben" type="text" name="name" />
-                    <input placeholder="Passwort eingeben" type="password" name="passwort" />
-                    <input id="loginbutton" type="submit" value="Login" />
-                    
-                </form>
-                <p>Noch nicht registriert?</p>
-                <form method="post" action="/Einkaufszettel-war/index?step=registerstart">
-                    <input id="loginbutton" type="submit" value="Registrieren" />
-                </form>
-            </article>
+        <article class="includecontent hintergrund">
+                    <header>
+                        <h2>Das ist die Login-Seite</h2>
+                    </header>
+                    <footer>
+                        <p class="articleinfo">Marco hat das geschrieben</p>
+                    </footer>
+                        <p>
+                            Hier kann man sich einloggen
+                        </p>
+                         <!-- GET-Button Variante -->
+                         <form method="post" action="/Einkaufszettel-war/index?step=loginstart">
+                        <p>Login: <input type="text" name="name" /></p>
+                        <p>Passwort: <input type="password" name="passwort" /></p>
+                        <p><input type="submit" value="Login" /></p>
+                        </form>
+                         
+                         <form method="post" action="/Einkaufszettel-war/index?step=registerstart"
+                         <p><input type="submit" value="Registrieren" /></p>        
+                         </form>    
+        </article>
     </body>
 </html>

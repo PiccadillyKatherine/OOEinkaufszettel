@@ -14,10 +14,15 @@
     <body>
         <article class="includecontent hintergrund">
                     <header>
-                        <h2>Falsche Eingabe!</h2>
+                        <h2>Baustelle!</h2>
                     </header>
-                        <p>Da ist wohl was schiefgelaufen :/ </p>
-                        <p> #pechgehabt</p>
+                    <footer>
+                        <p class="articleinfo">Marco hat das geschrieben</p>
+                    </footer>
+                        
+                        <p>
+                            Hier wird noch gebastelt!
+                        </p>
                         <img class="icon" src="Bilder/Baustelle.png">
         </article>
     </body>
