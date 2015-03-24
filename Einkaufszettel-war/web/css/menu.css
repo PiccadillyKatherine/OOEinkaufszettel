@@ -1,0 +1,49 @@
+#dropdown li:hover ul{
+    display:block;
+}
+
+#dropdown{
+    display:block;
+    position: relative;
+}
+
+
+#dropdown ul{
+    margin: 0;
+    padding: 0;
+}
+
+#dropdown li{
+    position:relative;
+    float:left;
+    list-style-type: none;
+    display: inline-block;
+}
+
+#dropdown ul:after {
+/*    content:".";*/
+    height: auto;
+    clear: both;
+    visibility: hidden;
+}
+
+#dropdown ul ul {
+    position: absolute;
+    width:auto;
+    display: none;
+    background-color: rgba(9, 98, 2, 0.56);
+    
+}
+
+#dropdown ul ul li a {
+    color: #fff;
+    font-weight: 200;
+    display: inline-block;
+}
+
+@media only screen and (min-width: 150px) and (max-width: 600px)
+{
+    #dropdown li:hover ul {
+        display:none;
+    }
+}
